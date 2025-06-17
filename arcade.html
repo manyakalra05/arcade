@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pixel Arcade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Press Start 2P', monospace;
+      background-color: #0e0e0e;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .arcade-machine {
+      margin-top: 2rem;
+      background: #222;
+      border: 8px solid #f00404;
+      border-radius: 20px;
+      padding: 1rem;
+      width: 90%;
+      max-width: 900px;
+      box-shadow: 0 0 40px #ff0044;
+    }
+
+    .arcade-screen {
+      background: #000;
+      padding: 1.5rem;
+      border: 4px inset #00ffcc;
+      border-radius: 10px;
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .crt {
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.02),
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+
+    .screen-content {
+      text-align: center;
+    }
+
+    h1 {
+      color: #00ffcc;
+      font-size: 1.5rem;
+      margin-bottom: 0.2em;
+    }
+
+    .subtitle {
+      font-size: 0.6rem;
+      color: #aaa;
+    }
+
+    .game-title {
+      font-size: 1rem;
+      color: #ffcc00;
+      margin: 1rem 0;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    .game-card {
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .game-card:hover,
+    .game-card.selected {
+      transform: scale(1.05);
+      border-color: #ffcc00;
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .game-card h3 {
+      margin: 0.5rem 0 0.2rem;
+      font-size: 0.6rem;
+      color: #fff;
+    }
+
+    .game-card p {
+      font-size: 0.5rem;
+      color: #ccc;
+    }
+
+    .arcade-controls {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 1rem;
+      background: #111;
+      border-radius: 10px;
+    }
+
+    .joystick {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .joystick-base {
+      width: 80px;
+      height: 80px;
+      background: #333;
+      border-radius: 50%;
+      position: relative;
+      margin-bottom: 0.5rem;
+      cursor: grab;
+    }
+
+    .joystick-head {
+      width: 40px;
+      height: 40px;
+      background: #ff0044;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      background: #0f0;
+      border-radius: 50%;
+      margin: 0.3rem;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .action-btn:active {
+      transform: scale(0.9);
+    }
+
+    .control-label {
+      font-size: 0.5rem;
+      margin-top: 0.3rem;
+      color: #ccc;
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.5rem;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="arcade-machine">
+    <div class="arcade-screen crt">
+      <div class="screen-content">
+        <header>
+          <h1>PIXEL ARCADE</h1>
+          <p class="subtitle">INSERT COIN TO PLAY</p>
+        </header>
+
+        <h2 class="game-title">SELECT YOUR GAME</h2>
+
+        <div class="game-grid">
+          <div class="game-card" data-game="1">
+            <img src="/images/1.png" alt="Space Invaders">
+            <h3>SPACE INVADERS</h3>
+            <p>1 PLAYER</p>
+          </div>
+          <div class="game-card" data-game="2">
+            <img src="/images/2.png" alt="Dino Runner">
+            <h3>DINO RUNNER</h3>
+            <p>1 PLAYER</p>
+          </div>
+          <div class="game-card" data-game="3">
+            <img src="/images/3.png" alt="Pac-Man">
+            <h3>PAC-MAN</h3>
+            <p>1 PLAYER</p>
+          </div>
+          <div class="game-card" data-game="4">
+            <img src="/images/4.png" alt="Puzzle Game">
+            <h3>DORAEMON PUZZLE</h3>
+            <p>1 PLAYER</p>
+          </div>
+          <div class="game-card" data-game="5">
+            <img src="/images/5.png" alt="Stack Tower">
+            <h3>STACK TOWER</h3>
+            <p>1 PLAYER</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arcade-controls">
+      <div class="joystick">
+        <div class="joystick-base" id="joystick">
+          <div class="joystick-head"></div>
+        </div>
+        <p class="control-label">MOVE</p>
+      </div>
+      <div class="buttons">
+        <div class="action-btn" id="action-btn-1"></div>
+        <div class="action-btn" id="action-btn-2"></div>
+        <p class="control-label">ACTION</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 PIXEL ARCADE | HIGH SCORES RESET DAILY</p>
+  </footer>
+
+  <script>
+    const games = [
+      { id: 1, name: "Space Invaders", url: "https://manyakalra05-spaceinvaders.netlify.app/", players: 1 },
+      { id: 2, name: "Dino Runner", url: "https://manyakalra05-chromedinosaur.netlify.app/", players: 1 },
+      { id: 3, name: "Pac-Man", url: "https://manyakalra05-pacman.netlify.app/", players: 1 },
+      { id: 4, name: "Doraemon Puzzle", url: "https://manyakalra05-puzzle.netlify.app/", players: 1 },
+      { id: 5, name: "Stack Tower", url: "https://manyakalra05-stacktower.netlify.app/", players: 1 }
+    ];
+
+    let selectedGame = 0;
+    const gameCards = document.querySelectorAll('.game-card');
+
+    function selectGame(direction) {
+      if (direction === 'left') {
+        selectedGame = (selectedGame - 1 + gameCards.length) % gameCards.length;
+      } else {
+        selectedGame = (selectedGame + 1) % gameCards.length;
+      }
+
+      gameCards.forEach((card, index) => {
+        card.classList.toggle('selected', index === selectedGame);
+      });
+      playSound('select');
+    }
+
+    function launchGame() {
+      const game = games[selectedGame];
+      if (game) {
+        playSound('start');
+        setTimeout(() => {
+          window.location.href = game.url;
+        }, 300);
+      }
+    }
+
+    const joystick = document.getElementById('joystick');
+    let isDragging = false;
+    let startX = 0;
+
+    joystick.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      playSound('move');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - startX;
+      if (Math.abs(deltaX) > 20) {
+        selectGame(deltaX > 0 ? 'right' : 'left');
+        startX = e.clientX;
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.querySelector('.joystick-head').style.transform = 'translate(-50%, -50%)';
+    });
+
+    document.getElementById('action-btn-1').addEventListener('click', launchGame);
+    document.getElementById('action-btn-2').addEventListener('click', () => {
+      playSound('button');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') selectGame('left');
+      if (e.key === 'ArrowRight') selectGame('right');
+      if (e.key === 'Enter' || e.key === ' ') launchGame();
+    });
+
+    gameCards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        selectedGame = index;
+        gameCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        playSound('select');
+        setTimeout(launchGame, 300);
+      });
+    });
+
+    function playSound(type) {
+      const sounds = {
+        select: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3',
+        start: 'https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3',
+        move: 'https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-casino-notification-211.mp3',
+        button: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-video-game-bonus-2044.mp3'
+      };
+      if (sounds[type]) {
+        const audio = new Audio(sounds[type]);
+        audio.volume = 0.3;
+        audio.play();
+      }
+    }
+
+    selectGame('right'); // select first game by default
+  </script>
+</body>
+</html>
